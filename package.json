@@ -1,0 +1,21 @@
+{
+  "name": "log-parser",
+  "version": "1.0.0",
+  "description": "read a log file from command line and pars it",
+  "main": "dist/parser.js",
+  "scripts": {
+    "start": "ts-node src/parser.ts",
+    "build": "tsc"
+  },
+  "author": "Yazdan",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/n-readlines": "^1.0.2",
+    "@types/node": "^16.11.7",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "n-readlines": "^1.0.1"
+  }
+}

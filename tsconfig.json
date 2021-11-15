@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "lib": ["DOM", "ES6"],
+    "strictNullChecks": true,
+    "strict": true,
+    "outDir": "dist",
+    "rootDir": "src"
+  }
+}
