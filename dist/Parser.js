@@ -2,42 +2,38 @@
 exports.__esModule = true;
 var logFormatHnadler_1 = require("./domains/handlers/logFormatHnadler");
 var logTypeHandlerFactory_1 = require("./domains/handlers/logTypeHandlers/logTypeHandlerFactory");
-var printHandler_1 = require("./domains/handlers/printHandler");
-var exeptions_1 = require("./exeptions");
+var filePrintHandler_1 = require("./domains/handlers/printHandler/filePrintHandler");
+var commandLineEnvManager_1 = require("./envManager/commandLineEnvManager");
 var simpleLogger_1 = require("./logger/simpleLogger");
 var Parser = /** @class */ (function () {
-    /**
-     *
-     */
-    function Parser() {
-        this.logger = new simpleLogger_1.SimpleLogger();
+    function Parser(logger, envManager, printHandelr) {
+        this.logger = logger;
+        this.envManager = envManager;
+        this.printHandler = printHandelr;
     }
     Parser.prototype.pars = function () {
-        console.log(process.argv);
         try {
-            if (process.argv.length < 4) {
-                throw new exeptions_1.InvalidInput(Parser.name, 'Usage: node ' + process.argv[1] + ' wrong input');
-            }
-            var inputFileName = process.argv[2];
-            var handler = this.buildChain();
-            handler.handle(inputFileName);
+            var input = this.envManager.getInputs();
+            input.inputFileName = './log/app.log';
+            input.outputFileName = './errors.json';
+            var handler = this.buildChain(input);
+            var res = handler.handle(input.inputFileName);
+            this.logger.info(res);
         }
         catch (e) {
             this.logger.error(e);
             process.exit(1);
         }
     };
-    Parser.prototype.buildChain = function () {
-        var outpuFileName = process.argv[3];
+    Parser.prototype.buildChain = function (input) {
         var logFormatHander = new logFormatHnadler_1.LogFormatHandler(this.logger);
-        var printHandler = new printHandler_1.PrintHandler(outpuFileName, this.logger);
-        var logTypeInput = process.argv.length >= 5 ? process.argv[4] : '';
+        var printHandler = new filePrintHandler_1.FilePrintHandler(input.outputFileName, this.logger);
         var logTypeHandlerFactory = new logTypeHandlerFactory_1.LogTypeHandlerFactory(this.logger);
-        var logTypeHandler = logTypeHandlerFactory.run(logTypeInput);
+        var logTypeHandler = logTypeHandlerFactory.run(input.logType);
         logFormatHander.setNext(logTypeHandler).setNext(printHandler);
         return logFormatHander;
     };
     return Parser;
 }());
 exports["default"] = Parser;
-new Parser().pars();
+new Parser(new simpleLogger_1.SimpleLogger(), new commandLineEnvManager_1.CommandLineEnvManager()).pars(); // dev mode

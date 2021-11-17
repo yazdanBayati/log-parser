@@ -5,28 +5,33 @@ export abstract class BaseError extends Error {
     super(message);
     this.type = type;
     this.date = new Date();
-    Object.setPrototypeOf(this, BaseError.prototype);
   }
 }
-export class InvalidFileFormat extends BaseError {
+export class InvalidFileFormatError extends BaseError {
   constructor(type: string, message: string) {
     super(type, message);
   }
 }
 
-export class FailedToPrintFile extends BaseError {
+export class FailedToPrintFileError extends BaseError {
   constructor(type: string, message?: string) {
     super(type, message);
   }
 }
 
-export class InvalidLogType extends BaseError {
+export class InvalidLogTypeError extends BaseError {
   constructor(type: string, message?: string) {
     super(type, message);
   }
 }
 
-export class InvalidInput extends BaseError {
+export class InvalidInputError extends BaseError {
+  constructor(type: string, message?: string) {
+    super(type, message);
+  }
+}
+
+export class NullHandlerRequestError extends BaseError {
   constructor(type: string, message?: string) {
     super(type, message);
   }

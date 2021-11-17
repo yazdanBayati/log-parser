@@ -17,7 +17,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.LogFormatHandler = void 0;
 var handler_1 = require("../handler");
-var lineByLine = require("n-readlines");
+var lineByLine = require('n-readlines');
 var exeptions_1 = require("../../exeptions");
 var LogFormatHandler = /** @class */ (function (_super) {
     __extends(LogFormatHandler, _super);
@@ -34,7 +34,7 @@ var LogFormatHandler = /** @class */ (function (_super) {
                     logs.push(log);
                 }
             }
-            _super.prototype.handle.call(_this, JSON.stringify(logs));
+            return _super.prototype.handle.call(_this, JSON.stringify(logs));
         };
         return _this;
     }
@@ -56,7 +56,7 @@ var LogFormatHandler = /** @class */ (function (_super) {
         }
         catch (e) {
             this.logger.error(e);
-            this.logger.info("skipped line : " + lineNumber);
+            this.logger.info("skipped line : " + lineNumber + " ================");
             return null;
         }
     };

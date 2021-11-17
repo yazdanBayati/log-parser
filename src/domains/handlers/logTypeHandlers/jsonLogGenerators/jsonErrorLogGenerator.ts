@@ -1,41 +1,39 @@
-import { LogType } from '../../../enums';
-import { InvalidFileFormat } from '../../../exeptions';
-import { Logger } from '../../../logger/logger';
-import { BasicLogModel, ErrorLogModel, LogDetails } from '../../../types';
-import { LogTypeHandler } from './logTypeHandler';
+import { LogType } from '../../../../enums';
+import { InvalidFileFormatError } from '../../../../exeptions';
+import { Logger } from '../../../../logger/logger';
+import { BasicLogModel, ErrorLogModel, LogDetails } from '../../../../types';
+import { JsonLogGenerator } from './josnLogGenerator';
 
-export class logErrorHandler extends LogTypeHandler {
+export class JsonErrorLogGenerator extends JsonLogGenerator {
   constructor(logger: Logger) {
     super(logger);
   }
-
-  public handle = (request: string) => {
-    const logs = this.parseToBasicLogModel(request);
+  run = (basicLogModels: BasicLogModel[]): string => {
     const errors: ErrorLogModel[] = [];
-    logs.forEach((log, index) => {
+    basicLogModels.forEach((log, index) => {
       const errorLogModel = this.convertToErrorLogModel(log, index);
       if (errorLogModel) {
         errors.push(errorLogModel);
       }
     });
-    super.handle(JSON.stringify(errors));
+
+    return JSON.stringify(errors);
   };
 
   private convertToErrorLogModel = (log: BasicLogModel, lineNumber: number) => {
-    console.log(`line number ${lineNumber}`);
     if (log.logLevel === LogType.Error) {
       try {
-        const logDetails = this.parseToLogDetails(log.details);
+        const logDetails: LogDetails = JSON.parse(log.details);
 
         if (!log.timeStamp) {
-          throw new InvalidFileFormat(
-            logErrorHandler.name,
+          throw new InvalidFileFormatError(
+            JsonErrorLogGenerator.name,
             ' timeStamp is invalid'
           );
         }
         if (!logDetails.err) {
-          throw new InvalidFileFormat(
-            logErrorHandler.name,
+          throw new InvalidFileFormatError(
+            JsonErrorLogGenerator.name,
             'error section is missing'
           );
         }
@@ -52,10 +50,5 @@ export class logErrorHandler extends LogTypeHandler {
         return null;
       }
     }
-  };
-
-  private printError = (e: any, lineNumber: number) => {
-    this.logger.error(e);
-    this.logger.info(`skipped line : ${lineNumber + 1}`);
   };
 }

@@ -10,9 +10,9 @@ var LogTypeHandlerFactory = /** @class */ (function () {
         this.run = function (formatType) {
             var result;
             if (formatType) {
-                switch (process.argv[4]) {
+                switch (formatType) {
                     case enums_1.LogType.Error:
-                        result = new logErrorHandler_1.logErrorHandler(_this.logger);
+                        result = new logErrorHandler_1.LogErrorHandler(_this.logger);
                     case enums_1.LogType.Debug:
                         throw new exeptions_1.InvalidLogType(LogTypeHandlerFactory.name, 'Debug log Type is not supported ');
                     case enums_1.LogType.Info:
@@ -20,13 +20,13 @@ var LogTypeHandlerFactory = /** @class */ (function () {
                     case enums_1.LogType.Warn:
                         throw new exeptions_1.InvalidLogType(LogTypeHandlerFactory.name, 'Warn log Type is not supported ');
                     case enums_1.LogType.Debug:
-                        return new logErrorHandler_1.logErrorHandler(_this.logger);
+                        return new logErrorHandler_1.LogErrorHandler(_this.logger);
                     default:
                         throw new exeptions_1.InvalidLogType(LogTypeHandlerFactory.name, 'Invalid Log Type');
                 }
             }
             else {
-                result = new logErrorHandler_1.logErrorHandler(_this.logger);
+                result = new logErrorHandler_1.LogErrorHandler(_this.logger);
             }
             return result;
         };

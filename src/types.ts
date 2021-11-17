@@ -1,3 +1,5 @@
+import { LogType } from './enums';
+
 export interface BasicLogModel {
   logLevel: string;
   timeStamp: Date;
@@ -16,4 +18,28 @@ export interface LogDetails {
   details: string;
   userId: number;
   err?: string;
+}
+
+export interface ErrorLogDetails extends LogDetails {
+  err?: string;
+}
+
+export interface HandlerRequest {
+  outputFileName: string;
+}
+
+export interface LogHandlerRequest extends HandlerRequest {
+  logType?: string;
+}
+
+export interface LogFormatHandlerRequest extends LogHandlerRequest {
+  inputFileName: string;
+}
+
+export interface LogTypeHnadlerRequest extends LogHandlerRequest {
+  logs: BasicLogModel[];
+}
+
+export interface OutputHandlerRequest extends HandlerRequest {
+  jsonLogs: string;
 }

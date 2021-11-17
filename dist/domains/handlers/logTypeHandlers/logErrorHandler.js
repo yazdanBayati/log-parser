@@ -15,13 +15,13 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-exports.logErrorHandler = void 0;
+exports.LogErrorHandler = void 0;
 var enums_1 = require("../../../enums");
 var exeptions_1 = require("../../../exeptions");
 var logTypeHandler_1 = require("./logTypeHandler");
-var logErrorHandler = /** @class */ (function (_super) {
-    __extends(logErrorHandler, _super);
-    function logErrorHandler(logger) {
+var LogErrorHandler = /** @class */ (function (_super) {
+    __extends(LogErrorHandler, _super);
+    function LogErrorHandler(logger) {
         var _this = _super.call(this, logger) || this;
         _this.handle = function (request) {
             var logs = _this.parseToBasicLogModel(request);
@@ -32,18 +32,17 @@ var logErrorHandler = /** @class */ (function (_super) {
                     errors.push(errorLogModel);
                 }
             });
-            _super.prototype.handle.call(_this, JSON.stringify(errors));
+            return _super.prototype.handle.call(_this, JSON.stringify(errors));
         };
         _this.convertToErrorLogModel = function (log, lineNumber) {
-            console.log("line number " + lineNumber);
             if (log.logLevel === enums_1.LogType.Error) {
                 try {
                     var logDetails = _this.parseToLogDetails(log.details);
                     if (!log.timeStamp) {
-                        throw new exeptions_1.InvalidFileFormat(logErrorHandler.name, ' timeStamp is invalid');
+                        throw new exeptions_1.InvalidFileFormat(LogErrorHandler.name, ' timeStamp is invalid');
                     }
                     if (!logDetails.err) {
-                        throw new exeptions_1.InvalidFileFormat(logErrorHandler.name, 'error section is missing');
+                        throw new exeptions_1.InvalidFileFormat(LogErrorHandler.name, 'error section is missing');
                     }
                     var error = {
                         timeStamp: new Date(log.timeStamp).getTime(),
@@ -61,10 +60,10 @@ var logErrorHandler = /** @class */ (function (_super) {
         };
         _this.printError = function (e, lineNumber) {
             _this.logger.error(e);
-            _this.logger.info("skipped line : " + (lineNumber + 1));
+            _this.logger.info("skipped line : " + (lineNumber + 1) + " ===========");
         };
         return _this;
     }
-    return logErrorHandler;
+    return LogErrorHandler;
 }(logTypeHandler_1.LogTypeHandler));
-exports.logErrorHandler = logErrorHandler;
+exports.LogErrorHandler = LogErrorHandler;
