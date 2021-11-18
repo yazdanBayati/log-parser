@@ -1,39 +1,38 @@
 "use strict";
 exports.__esModule = true;
 var logFormatHnadler_1 = require("./domains/handlers/logFormatHnadler");
-var logTypeHandlerFactory_1 = require("./domains/handlers/logTypeHandlers/logTypeHandlerFactory");
-var filePrintHandler_1 = require("./domains/handlers/printHandler/filePrintHandler");
+var logTypeHandler_1 = require("./domains/handlers/logTypeHandlers/logTypeHandler");
 var commandLineEnvManager_1 = require("./envManager/commandLineEnvManager");
 var simpleLogger_1 = require("./logger/simpleLogger");
 var Parser = /** @class */ (function () {
-    function Parser(logger, envManager, printHandelr) {
+    function Parser(logger, envManager) {
         this.logger = logger;
         this.envManager = envManager;
-        this.printHandler = printHandelr;
     }
     Parser.prototype.pars = function () {
         try {
-            var input = this.envManager.getInputs();
-            input.inputFileName = './log/app.log';
-            input.outputFileName = './errors.json';
-            var handler = this.buildChain(input);
-            var res = handler.handle(input.inputFileName);
+            var handler = this.buildChain();
+            var res = handler.handle({});
             this.logger.info(res);
+            return res;
         }
         catch (e) {
             this.logger.error(e);
             process.exit(1);
         }
     };
-    Parser.prototype.buildChain = function (input) {
+    Parser.prototype.buildChain = function () {
+        var inputHandler = this.envManager.buildInputHandler();
         var logFormatHander = new logFormatHnadler_1.LogFormatHandler(this.logger);
-        var printHandler = new filePrintHandler_1.FilePrintHandler(input.outputFileName, this.logger);
-        var logTypeHandlerFactory = new logTypeHandlerFactory_1.LogTypeHandlerFactory(this.logger);
-        var logTypeHandler = logTypeHandlerFactory.run(input.logType);
-        logFormatHander.setNext(logTypeHandler).setNext(printHandler);
-        return logFormatHander;
+        var logTypeHandler = new logTypeHandler_1.LogTypeHandler(this.logger);
+        var outputHandler = this.envManager.buildOutpuHandler();
+        inputHandler
+            .setNext(logFormatHander)
+            .setNext(logTypeHandler)
+            .setNext(outputHandler);
+        return inputHandler;
     };
     return Parser;
 }());
 exports["default"] = Parser;
-new Parser(new simpleLogger_1.SimpleLogger(), new commandLineEnvManager_1.CommandLineEnvManager()).pars(); // dev mode
+new Parser(new simpleLogger_1.SimpleLogger(), new commandLineEnvManager_1.CommandLineEnvManager(new simpleLogger_1.SimpleLogger())).pars(); // dev mode

@@ -1,5 +1,5 @@
 import { Logger } from '../../../logger/logger';
-import { LogFormatHandlerRequest } from '../../../types';
+import { ParseLogRequest } from '../../../types';
 import { InputHandler } from './inputHandler';
 
 export class MockInputHandler extends InputHandler {
@@ -19,13 +19,13 @@ export class MockInputHandler extends InputHandler {
     this.logType = logType;
   }
 
-  public handle = (): string => {
-    const res: LogFormatHandlerRequest = {
+  public handle = (request: ParseLogRequest): string => {
+    request.input = {
       inputFileName: this.inputFileName,
       outputFileName: this.outputFileName,
       logType: this.logType,
     };
 
-    return super.handle(res);
+    return super.handle(request);
   };
 }

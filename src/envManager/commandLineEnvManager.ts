@@ -1,6 +1,6 @@
 import { CommandLineInputHandler } from '../domains/handlers/inputHandler/commandLineInputHandler';
 import { InputHandler } from '../domains/handlers/inputHandler/inputHandler';
-import { FileOutputHandler } from '../domains/handlers/outputHandler/fileOutputPrintHandler';
+import { FileOutputHandler } from '../domains/handlers/outputHandler/fileOutputHandler';
 import { OutputHandler } from '../domains/handlers/outputHandler/outputHandler';
 import { Logger } from '../logger/logger';
 import { EnvManager } from './evnManager';

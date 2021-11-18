@@ -1,38 +1,42 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 exports.__esModule = true;
 exports.TestEnvManager = void 0;
-var testPrintHandler_1 = require("../domains/handlers/printHandler/testPrintHandler");
-var TestEnvManager = /** @class */ (function () {
-    function TestEnvManager(inputFileName, outputFileName, logType) {
-        this.buildPrintHandler = function () {
-            return new testPrintHandler_1.TestPrintHandler();
+var mockInputHandler_1 = require("../domains/handlers/inputHandler/mockInputHandler");
+var mockOutpuHandler_1 = require("../domains/handlers/outputHandler/mockOutpuHandler");
+var evnManager_1 = require("./evnManager");
+var TestEnvManager = /** @class */ (function (_super) {
+    __extends(TestEnvManager, _super);
+    function TestEnvManager(inputFileName, outputFileName, logType, logger) {
+        var _this = _super.call(this, logger) || this;
+        _this.buildInputHandler = function () {
+            return new mockInputHandler_1.MockInputHandler(_this.inputFileName, _this.outputFileName, _this.logType, _this.logger);
         };
-        this.exit = function () { };
-        this._inputFileName = inputFileName;
-        this._outputFileName = outputFileName;
-        this._logType = logType;
+        _this.buildOutpuHandler = function () {
+            return new mockOutpuHandler_1.MockOutputHandler(_this.logger);
+        };
+        _this.exit = function () {
+            console.log('tessssstttt');
+        };
+        _this.inputFileName = inputFileName;
+        _this.outputFileName = outputFileName;
+        _this.logType = logType;
+        return _this;
     }
-    Object.defineProperty(TestEnvManager.prototype, "inputFileName", {
-        get: function () {
-            return this._inputFileName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TestEnvManager.prototype, "outputFileName", {
-        get: function () {
-            return this._outputFileName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TestEnvManager.prototype, "logType", {
-        get: function () {
-            return this._logType;
-        },
-        enumerable: false,
-        configurable: true
-    });
     return TestEnvManager;
-}());
+}(evnManager_1.EnvManager));
 exports.TestEnvManager = TestEnvManager;

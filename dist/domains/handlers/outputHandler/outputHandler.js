@@ -15,13 +15,13 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-exports.PrintHandler = void 0;
+exports.OutputHandler = void 0;
 var handler_1 = require("../../handler");
-var PrintHandler = /** @class */ (function (_super) {
-    __extends(PrintHandler, _super);
-    function PrintHandler(logger) {
+var OutputHandler = /** @class */ (function (_super) {
+    __extends(OutputHandler, _super);
+    function OutputHandler(logger) {
         return _super.call(this, logger) || this;
     }
-    return PrintHandler;
+    return OutputHandler;
 }(handler_1.AbstractHandler));
-exports.PrintHandler = PrintHandler;
+exports.OutputHandler = OutputHandler;

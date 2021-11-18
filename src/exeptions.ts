@@ -31,7 +31,7 @@ export class InvalidInputError extends BaseError {
   }
 }
 
-export class NullHandlerRequestError extends BaseError {
+export class NullRefreanceError extends BaseError {
   constructor(type: string, message?: string) {
     super(type, message);
   }

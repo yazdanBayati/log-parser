@@ -16,16 +16,25 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 exports.LogTypeHandler = void 0;
+var exeptions_1 = require("../../../exeptions");
 var handler_1 = require("../../handler");
+var jsonlogGeneratorFactory_1 = require("./jsonlogGeneratorFactory");
 var LogTypeHandler = /** @class */ (function (_super) {
     __extends(LogTypeHandler, _super);
-    function LogTypeHandler() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.parseToBasicLogModel = function (logs) {
-            return JSON.parse(logs);
-        };
-        _this.parseToLogDetails = function (details) {
-            return JSON.parse(details);
+    function LogTypeHandler(logger) {
+        var _this = _super.call(this, logger) || this;
+        _this.handle = function (request) {
+            var _a;
+            if (request.basicFormatLog && request.input) {
+                var jsonLogFactory = new jsonlogGeneratorFactory_1.JsonLogGeneratorFactory(_this.logger);
+                var jsonLogGenerator = jsonLogFactory.run((_a = request.input) === null || _a === void 0 ? void 0 : _a.logType);
+                var jsonLogs = jsonLogGenerator.run(request === null || request === void 0 ? void 0 : request.basicFormatLog);
+                request.jsonFormatLog = jsonLogs;
+                return _super.prototype.handle.call(_this, request);
+            }
+            else {
+                throw new exeptions_1.NullRefreanceError(LogTypeHandler.name, 'basiclogModel && iput shoud have value');
+            }
         };
         return _this;
     }

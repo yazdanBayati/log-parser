@@ -15,25 +15,13 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-exports.PrintHandler = void 0;
-var handler_1 = require("../handler");
-var fs_1 = require("fs");
-var exeptions_1 = require("../../exeptions");
-var PrintHandler = /** @class */ (function (_super) {
-    __extends(PrintHandler, _super);
-    function PrintHandler(outputfileName, logger) {
-        var _this = _super.call(this, logger) || this;
-        _this.handle = function (request) {
-            (0, fs_1.writeFile)(_this.outputFileName, request, function (error) {
-                if (error) {
-                    throw new exeptions_1.FailedToPrintFile(PrintHandler.name, error.message);
-                }
-            });
-            _this.logger.info('successfully added the result !!!!');
-        };
-        _this.outputFileName = outputfileName;
-        return _this;
+exports.InputHandler = void 0;
+var handler_1 = require("../../handler");
+var InputHandler = /** @class */ (function (_super) {
+    __extends(InputHandler, _super);
+    function InputHandler(logger) {
+        return _super.call(this, logger) || this;
     }
-    return PrintHandler;
+    return InputHandler;
 }(handler_1.AbstractHandler));
-exports.PrintHandler = PrintHandler;
+exports.InputHandler = InputHandler;

@@ -1,16 +1,27 @@
-import { LogType } from './enums';
+export interface ParseLogRequest {
+  input?: inputModel;
+  basicFormatLog?: BasicLogModel[];
+  jsonFormatLog?: string;
+}
 
+export interface inputModel {
+  inputFileName: string;
+  outputFileName: string;
+  logType?: string;
+}
 export interface BasicLogModel {
   logLevel: string;
   timeStamp: Date;
   details: string;
 }
 
-export interface ErrorLogModel {
+export interface JsonLogModel {
   logLevel: string;
   timeStamp: number;
-  err: string;
   transactionId: string;
+}
+export interface JsonErrorLogModel extends JsonLogModel {
+  err: string;
 }
 
 export interface LogDetails {
@@ -18,28 +29,4 @@ export interface LogDetails {
   details: string;
   userId: number;
   err?: string;
-}
-
-export interface ErrorLogDetails extends LogDetails {
-  err?: string;
-}
-
-export interface HandlerRequest {
-  outputFileName: string;
-}
-
-export interface LogHandlerRequest extends HandlerRequest {
-  logType?: string;
-}
-
-export interface LogFormatHandlerRequest extends LogHandlerRequest {
-  inputFileName: string;
-}
-
-export interface LogTypeHnadlerRequest extends LogHandlerRequest {
-  logs: BasicLogModel[];
-}
-
-export interface OutputHandlerRequest extends HandlerRequest {
-  jsonLogs: string;
 }

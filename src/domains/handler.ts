@@ -1,9 +1,9 @@
 import { Logger } from '../logger/logger';
-import { HandlerRequest } from '../types';
+import { ParseLogRequest } from '../types';
 
 export interface Handler {
   setNext: (handler: Handler) => Handler;
-  handle: (request?: any) => string;
+  handle: (request: ParseLogRequest) => string;
 }
 
 export abstract class AbstractHandler implements Handler {
@@ -19,7 +19,7 @@ export abstract class AbstractHandler implements Handler {
     return handler;
   }
 
-  public handle(request?: HandlerRequest): string {
+  public handle(request: ParseLogRequest): string {
     if (this.nextHandler) {
       return this.nextHandler.handle(request);
     } else {

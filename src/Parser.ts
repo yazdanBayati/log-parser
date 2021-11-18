@@ -6,6 +6,7 @@ import { CommandLineEnvManager } from './envManager/commandLineEnvManager';
 import { EnvManager } from './envManager/evnManager';
 import { Logger } from './logger/logger';
 import { SimpleLogger } from './logger/simpleLogger';
+import { ParseLogRequest } from './types';
 
 export default class Parser {
   private logger: Logger;
@@ -14,11 +15,12 @@ export default class Parser {
     this.logger = logger;
     this.envManager = envManager;
   }
-  pars() {
+  pars(): string {
     try {
       const handler = this.buildChain();
-      const res = handler.handle();
+      const res = handler.handle({} as ParseLogRequest);
       this.logger.info(res);
+      return res;
     } catch (e: any) {
       this.logger.error(e);
       process.exit(1);

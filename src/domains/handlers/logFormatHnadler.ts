@@ -1,29 +1,22 @@
 import { AbstractHandler } from '../handler';
 const lineByLine = require('n-readlines');
-import {
-  InvalidFileFormatError,
-  NullHandlerRequestError,
-} from '../../exeptions';
-import {
-  BasicLogModel,
-  LogFormatHandlerRequest,
-  LogTypeHnadlerRequest,
-} from '../../types';
+import { InvalidFileFormatError, NullRefreanceError } from '../../exeptions';
+import { BasicLogModel, ParseLogRequest } from '../../types';
 import { Logger } from '../../logger/logger';
 
 export class LogFormatHandler extends AbstractHandler {
   constructor(logger: Logger) {
     super(logger);
   }
-  public handle = (request?: LogFormatHandlerRequest): string => {
-    if (request) {
-      const liner = new lineByLine(request?.inputFileName);
+  public handle = (request: ParseLogRequest): string => {
+    if (request.input) {
+      const liner = new lineByLine(request.input.inputFileName);
       let line;
       const logs: BasicLogModel[] = [];
 
       let lineNumber = 1;
       while ((line = liner.next())) {
-        const log: BasicLogModel | null = this.ConvertToLogModel(
+        const log: BasicLogModel | undefined = this.ConvertToLogModel(
           line,
           lineNumber
         );
@@ -32,17 +25,12 @@ export class LogFormatHandler extends AbstractHandler {
         }
       }
 
-      const res: LogTypeHnadlerRequest = {
-        logs: logs,
-        outputFileName: request?.outputFileName,
-        logType: request?.logType,
-      };
-
-      return super.handle(res);
+      request.basicFormatLog = logs;
+      return super.handle(request);
     } else {
-      throw new NullHandlerRequestError(
+      throw new NullRefreanceError(
         LogFormatHandler.name,
-        'request can not be null'
+        'input can not be null'
       );
     }
   };
@@ -67,7 +55,7 @@ export class LogFormatHandler extends AbstractHandler {
     } catch (e: any) {
       this.logger.error(e);
       this.logger.info(`skipped line : ${lineNumber} ================`);
-      return null;
+      return undefined;
     }
   }
 }

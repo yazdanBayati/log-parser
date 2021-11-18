@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": ["DOM", "ES6"],
+    "lib": ["DOM", "ES5"],
     "strictNullChecks": true,
     "strict": true,
     "outDir": "dist",

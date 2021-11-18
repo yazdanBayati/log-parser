@@ -1,5 +1,10 @@
 {
   "name": "log-parser",
+  "jest": {
+    "modulePathIgnorePatterns": [
+      "./dist"
+    ]
+  },
   "version": "1.0.0",
   "description": "read a log file from command line and pars it",
   "main": "dist/parser.js",

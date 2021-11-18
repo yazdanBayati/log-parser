@@ -31,5 +31,7 @@ export class TestEnvManager extends EnvManager {
   buildOutpuHandler = (): OutputHandler => {
     return new MockOutputHandler(this.logger);
   };
-  exit = (): void => {};
+  exit = (): void => {
+    console.log('tessssstttt');
+  };
 }

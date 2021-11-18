@@ -1,17 +1,17 @@
 import { AbstractHandler } from '../../handler';
 import { Logger } from '../../../logger/logger';
-import { OutputHandlerRequest } from '../../../types';
-import { NullHandlerRequestError } from '../../../exeptions';
+import { NullRefreanceError } from '../../../exeptions';
+import { ParseLogRequest } from '../../../types';
 
 export class MockOutputHandler extends AbstractHandler {
   constructor(logger: Logger) {
     super(logger);
   }
-  handle = (request?: OutputHandlerRequest): string => {
-    if (request) {
-      return request.jsonLogs;
+  handle = (request: ParseLogRequest): string => {
+    if (request.jsonFormatLog) {
+      return request.jsonFormatLog;
     } else {
-      throw new NullHandlerRequestError(
+      throw new NullRefreanceError(
         MockOutputHandler.name,
         'request can not be null'
       );

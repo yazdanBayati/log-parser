@@ -15,48 +15,55 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-exports.InvalidInput = exports.InvalidLogType = exports.FailedToPrintFile = exports.InvalidFileFormat = exports.BaseError = void 0;
+exports.NullRefreanceError = exports.InvalidInputError = exports.InvalidLogTypeError = exports.FailedToPrintFileError = exports.InvalidFileFormatError = exports.BaseError = void 0;
 var BaseError = /** @class */ (function (_super) {
     __extends(BaseError, _super);
     function BaseError(type, message) {
         var _this = _super.call(this, message) || this;
         _this.type = type;
         _this.date = new Date();
-        Object.setPrototypeOf(_this, BaseError.prototype);
         return _this;
     }
     return BaseError;
 }(Error));
 exports.BaseError = BaseError;
-var InvalidFileFormat = /** @class */ (function (_super) {
-    __extends(InvalidFileFormat, _super);
-    function InvalidFileFormat(type, message) {
+var InvalidFileFormatError = /** @class */ (function (_super) {
+    __extends(InvalidFileFormatError, _super);
+    function InvalidFileFormatError(type, message) {
         return _super.call(this, type, message) || this;
     }
-    return InvalidFileFormat;
+    return InvalidFileFormatError;
 }(BaseError));
-exports.InvalidFileFormat = InvalidFileFormat;
-var FailedToPrintFile = /** @class */ (function (_super) {
-    __extends(FailedToPrintFile, _super);
-    function FailedToPrintFile(type, message) {
+exports.InvalidFileFormatError = InvalidFileFormatError;
+var FailedToPrintFileError = /** @class */ (function (_super) {
+    __extends(FailedToPrintFileError, _super);
+    function FailedToPrintFileError(type, message) {
         return _super.call(this, type, message) || this;
     }
-    return FailedToPrintFile;
+    return FailedToPrintFileError;
 }(BaseError));
-exports.FailedToPrintFile = FailedToPrintFile;
-var InvalidLogType = /** @class */ (function (_super) {
-    __extends(InvalidLogType, _super);
-    function InvalidLogType(type, message) {
+exports.FailedToPrintFileError = FailedToPrintFileError;
+var InvalidLogTypeError = /** @class */ (function (_super) {
+    __extends(InvalidLogTypeError, _super);
+    function InvalidLogTypeError(type, message) {
         return _super.call(this, type, message) || this;
     }
-    return InvalidLogType;
+    return InvalidLogTypeError;
 }(BaseError));
-exports.InvalidLogType = InvalidLogType;
-var InvalidInput = /** @class */ (function (_super) {
-    __extends(InvalidInput, _super);
-    function InvalidInput(type, message) {
+exports.InvalidLogTypeError = InvalidLogTypeError;
+var InvalidInputError = /** @class */ (function (_super) {
+    __extends(InvalidInputError, _super);
+    function InvalidInputError(type, message) {
         return _super.call(this, type, message) || this;
     }
-    return InvalidInput;
+    return InvalidInputError;
 }(BaseError));
-exports.InvalidInput = InvalidInput;
+exports.InvalidInputError = InvalidInputError;
+var NullRefreanceError = /** @class */ (function (_super) {
+    __extends(NullRefreanceError, _super);
+    function NullRefreanceError(type, message) {
+        return _super.call(this, type, message) || this;
+    }
+    return NullRefreanceError;
+}(BaseError));
+exports.NullRefreanceError = NullRefreanceError;

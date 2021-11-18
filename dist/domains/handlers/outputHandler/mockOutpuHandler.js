@@ -15,17 +15,23 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-exports.TestPrintHandler = void 0;
+exports.MockOutputHandler = void 0;
 var handler_1 = require("../../handler");
-var TestPrintHandler = /** @class */ (function (_super) {
-    __extends(TestPrintHandler, _super);
-    function TestPrintHandler(logger) {
+var exeptions_1 = require("../../../exeptions");
+var MockOutputHandler = /** @class */ (function (_super) {
+    __extends(MockOutputHandler, _super);
+    function MockOutputHandler(logger) {
         var _this = _super.call(this, logger) || this;
         _this.handle = function (request) {
-            return request;
+            if (request.jsonFormatLog) {
+                return request.jsonFormatLog;
+            }
+            else {
+                throw new exeptions_1.NullRefreanceError(MockOutputHandler.name, 'request can not be null');
+            }
         };
         return _this;
     }
-    return TestPrintHandler;
+    return MockOutputHandler;
 }(handler_1.AbstractHandler));
-exports.TestPrintHandler = TestPrintHandler;
+exports.MockOutputHandler = MockOutputHandler;

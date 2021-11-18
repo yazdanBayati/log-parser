@@ -1,7 +1,11 @@
 import { LogType } from '../../../../enums';
 import { InvalidFileFormatError } from '../../../../exeptions';
 import { Logger } from '../../../../logger/logger';
-import { BasicLogModel, ErrorLogModel, LogDetails } from '../../../../types';
+import {
+  BasicLogModel,
+  JsonErrorLogModel,
+  LogDetails,
+} from '../../../../types';
 import { JsonLogGenerator } from './josnLogGenerator';
 
 export class JsonErrorLogGenerator extends JsonLogGenerator {
@@ -9,7 +13,7 @@ export class JsonErrorLogGenerator extends JsonLogGenerator {
     super(logger);
   }
   run = (basicLogModels: BasicLogModel[]): string => {
-    const errors: ErrorLogModel[] = [];
+    const errors: JsonErrorLogModel[] = [];
     basicLogModels.forEach((log, index) => {
       const errorLogModel = this.convertToErrorLogModel(log, index);
       if (errorLogModel) {
@@ -25,7 +29,7 @@ export class JsonErrorLogGenerator extends JsonLogGenerator {
       try {
         const logDetails: LogDetails = JSON.parse(log.details);
 
-        if (!log.timeStamp) {
+        if (!log.timeStamp || log.timeStamp.toString() === 'Invalid Date') {
           throw new InvalidFileFormatError(
             JsonErrorLogGenerator.name,
             ' timeStamp is invalid'
@@ -38,7 +42,7 @@ export class JsonErrorLogGenerator extends JsonLogGenerator {
           );
         }
 
-        const error: ErrorLogModel = {
+        const error: JsonErrorLogModel = {
           timeStamp: new Date(log.timeStamp).getTime(),
           logLevel: LogType.Error,
           transactionId: logDetails.transactionId,
@@ -47,7 +51,7 @@ export class JsonErrorLogGenerator extends JsonLogGenerator {
         return error;
       } catch (e: any) {
         this.printError(e, lineNumber);
-        return null;
+        return undefined;
       }
     }
   };

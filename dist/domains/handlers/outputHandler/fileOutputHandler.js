@@ -15,26 +15,30 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-exports.FilePrintHandler = void 0;
-var handler_1 = require("../../handler");
+exports.FileOutputHandler = void 0;
 var fs_1 = require("fs");
 var exeptions_1 = require("../../../exeptions");
-var FilePrintHandler = /** @class */ (function (_super) {
-    __extends(FilePrintHandler, _super);
-    function FilePrintHandler(outputfileName, logger) {
+var outputHandler_1 = require("./outputHandler");
+var FileOutputHandler = /** @class */ (function (_super) {
+    __extends(FileOutputHandler, _super);
+    function FileOutputHandler(logger) {
         var _this = _super.call(this, logger) || this;
         _this.handle = function (request) {
-            (0, fs_1.writeFile)(_this.outputFileName, request, function (error) {
-                if (error) {
-                    throw new exeptions_1.FailedToPrintFile(FilePrintHandler.name, error.message);
-                }
-            });
-            _this.logger.info('successfully added the result');
-            return request;
+            if (request.input && request.jsonFormatLog) {
+                (0, fs_1.writeFile)(request.input.outputFileName, request.jsonFormatLog, function (error) {
+                    if (error) {
+                        throw new exeptions_1.FailedToPrintFileError(FileOutputHandler.name, error.message);
+                    }
+                });
+                _this.logger.info('successfully added the result');
+                return request.jsonFormatLog;
+            }
+            else {
+                throw new exeptions_1.NullRefreanceError(FileOutputHandler.name, 'input && jsonFormatLog should have value');
+            }
         };
-        _this.outputFileName = outputfileName;
         return _this;
     }
-    return FilePrintHandler;
-}(handler_1.AbstractHandler));
-exports.FilePrintHandler = FilePrintHandler;
+    return FileOutputHandler;
+}(outputHandler_1.OutputHandler));
+exports.FileOutputHandler = FileOutputHandler;

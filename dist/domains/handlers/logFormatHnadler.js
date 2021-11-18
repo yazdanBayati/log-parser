@@ -24,17 +24,23 @@ var LogFormatHandler = /** @class */ (function (_super) {
     function LogFormatHandler(logger) {
         var _this = _super.call(this, logger) || this;
         _this.handle = function (request) {
-            var liner = new lineByLine(request);
-            var line;
-            var logs = [];
-            var lineNumber = 1;
-            while ((line = liner.next())) {
-                var log = _this.ConvertToLogModel(line, lineNumber);
-                if (log) {
-                    logs.push(log);
+            if (request.input) {
+                var liner = new lineByLine(request.input.inputFileName);
+                var line = void 0;
+                var logs = [];
+                var lineNumber = 1;
+                while ((line = liner.next())) {
+                    var log = _this.ConvertToLogModel(line, lineNumber);
+                    if (log) {
+                        logs.push(log);
+                    }
                 }
+                request.basicFormatLog = logs;
+                return _super.prototype.handle.call(_this, request);
             }
-            return _super.prototype.handle.call(_this, JSON.stringify(logs));
+            else {
+                throw new exeptions_1.NullRefreanceError(LogFormatHandler.name, 'input can not be null');
+            }
         };
         return _this;
     }
@@ -43,7 +49,7 @@ var LogFormatHandler = /** @class */ (function (_super) {
         try {
             var items = lineStr.split(' - ');
             if (items.length != 3) {
-                throw new exeptions_1.InvalidFileFormat(LogFormatHandler.name, 'invalid file format');
+                throw new exeptions_1.InvalidFileFormatError(LogFormatHandler.name, 'invalid file format');
             }
             else {
                 var log = {
@@ -57,7 +63,7 @@ var LogFormatHandler = /** @class */ (function (_super) {
         catch (e) {
             this.logger.error(e);
             this.logger.info("skipped line : " + lineNumber + " ================");
-            return null;
+            return undefined;
         }
     };
     return LogFormatHandler;

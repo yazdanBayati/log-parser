@@ -15,34 +15,33 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-exports.LogErrorHandler = void 0;
-var enums_1 = require("../../../enums");
-var exeptions_1 = require("../../../exeptions");
-var logTypeHandler_1 = require("./logTypeHandler");
-var LogErrorHandler = /** @class */ (function (_super) {
-    __extends(LogErrorHandler, _super);
-    function LogErrorHandler(logger) {
+exports.JsonErrorLogGenerator = void 0;
+var enums_1 = require("../../../../enums");
+var exeptions_1 = require("../../../../exeptions");
+var josnLogGenerator_1 = require("./josnLogGenerator");
+var JsonErrorLogGenerator = /** @class */ (function (_super) {
+    __extends(JsonErrorLogGenerator, _super);
+    function JsonErrorLogGenerator(logger) {
         var _this = _super.call(this, logger) || this;
-        _this.handle = function (request) {
-            var logs = _this.parseToBasicLogModel(request);
+        _this.run = function (basicLogModels) {
             var errors = [];
-            logs.forEach(function (log, index) {
+            basicLogModels.forEach(function (log, index) {
                 var errorLogModel = _this.convertToErrorLogModel(log, index);
                 if (errorLogModel) {
                     errors.push(errorLogModel);
                 }
             });
-            return _super.prototype.handle.call(_this, JSON.stringify(errors));
+            return JSON.stringify(errors);
         };
         _this.convertToErrorLogModel = function (log, lineNumber) {
             if (log.logLevel === enums_1.LogType.Error) {
                 try {
-                    var logDetails = _this.parseToLogDetails(log.details);
-                    if (!log.timeStamp) {
-                        throw new exeptions_1.InvalidFileFormat(LogErrorHandler.name, ' timeStamp is invalid');
+                    var logDetails = JSON.parse(log.details);
+                    if (!log.timeStamp || log.timeStamp.toString() === 'Invalid Date') {
+                        throw new exeptions_1.InvalidFileFormatError(JsonErrorLogGenerator.name, ' timeStamp is invalid');
                     }
                     if (!logDetails.err) {
-                        throw new exeptions_1.InvalidFileFormat(LogErrorHandler.name, 'error section is missing');
+                        throw new exeptions_1.InvalidFileFormatError(JsonErrorLogGenerator.name, 'error section is missing');
                     }
                     var error = {
                         timeStamp: new Date(log.timeStamp).getTime(),
@@ -54,16 +53,12 @@ var LogErrorHandler = /** @class */ (function (_super) {
                 }
                 catch (e) {
                     _this.printError(e, lineNumber);
-                    return null;
+                    return undefined;
                 }
             }
         };
-        _this.printError = function (e, lineNumber) {
-            _this.logger.error(e);
-            _this.logger.info("skipped line : " + (lineNumber + 1) + " ===========");
-        };
         return _this;
     }
-    return LogErrorHandler;
-}(logTypeHandler_1.LogTypeHandler));
-exports.LogErrorHandler = LogErrorHandler;
+    return JsonErrorLogGenerator;
+}(josnLogGenerator_1.JsonLogGenerator));
+exports.JsonErrorLogGenerator = JsonErrorLogGenerator;
