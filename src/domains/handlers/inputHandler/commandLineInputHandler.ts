@@ -22,11 +22,6 @@ export class CommandLineInputHandler extends InputHandler {
       logType: process.argv.length >= 5 ? process.argv[4] : '',
     };
 
-    // request.input = {
-    //   inputFileName: './log/app.log',
-    //   outputFileName: 'error.json',
-    // };
-
     return super.handle(request);
   };
 }

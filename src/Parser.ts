@@ -23,7 +23,8 @@ export default class Parser {
       return res;
     } catch (e: any) {
       this.logger.error(e);
-      process.exit(1);
+      this.envManager.exit();
+      return '';
     }
   }
 
